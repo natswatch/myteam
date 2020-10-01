@@ -1,0 +1,27 @@
+{
+  "name": "challenge10",
+  "version": "1.0.0",
+  "description": "team profile generator",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "jest": "^26.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natswatch/myteam.git"
+  },
+  "author": "nathalie c.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/natswatch/myteam/issues"
+  },
+  "homepage": "https://github.com/natswatch/myteam#readme"
+}
