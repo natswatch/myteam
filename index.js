@@ -3,12 +3,13 @@ const Employee = require('./lib/Employee');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
+const { validate } = require('@babel/types');
 
 const employeeInfo = [
     {
         type: 'input',
         name: 'name',
-        message: "What is team manager's name?"
+        message: "Please enter the name?"
     },
     {
         type: 'input',
@@ -23,74 +24,83 @@ const employeeInfo = [
 ];
     
 
+
 class Team {
     constructor () {
     this.employees = [];
     }
 
     promptManager() {
-        employeeInfo.push({
+        let newPrompt = [];
+        newPrompt = employeeInfo.concat({
             type: 'input',
             name: 'officeNumber',
             message: 'Please enter the office number'
         });
         
-        inquirer.prompt(employeeInfo)
+        inquirer.prompt(newPrompt)
         .then(({name,id,email,officeNumber}) => {
             this.employees.push(new Manager(name,id,email,officeNumber));
-            console.log(this.employees);
+            this.selectNextTeamMember();
         })
     }
 
     promptEnginner() {
-        employeeInfo.push({
+        let newPrompt = [];
+        newPrompt = employeeInfo.concat({
             type: 'input',
             name: 'github',
             message: 'Please include the github username'
         });
-        
-        inquirer.prompt(employeeInfo)
-        .then(({name,id,email,officeNumber}) => {
+        console.log(newPrompt);
+        inquirer.prompt(newPrompt)
+        .then(({name,id,email,github}) => {
             this.employees.push(new Engineer(name,id,email,github));
-            
+            this.selectNextTeamMember();
         })
     }
+
     promptIntern() {
-        employeeInfo.push({
+        let newPrompt = [];
+        newPrompt = employeeInfo.concat({
             type: 'input',
             name: 'school',
             message: 'Please enter the school name'
         });
         
-        inquirer.prompt(employeeInfo)
+        inquirer.prompt(newPrompt)
         .then(({name,id,email,school}) => {
             this.employees.push(new Engineer(name,id,email,school));
-            
+            this.selectNextTeamMember();
+        })
+    }
+
+    selectNextTeamMember() {
+        inquirer.prompt({
+            type: 'list',
+            message: 'Would you like to add a...',
+            name: 'role',
+            choices: ['Engineer', 'Intern', 'none']
+        })
+        .then(({ role }) => {
+    
+            switch(role) {
+                case 'Engineer':
+                    this.promptEnginner();
+                    break;
+                case 'Intern': 
+                    this.promptIntern();
+                    break;
+                case 'none':
+                    break;
+            }
         })
     }
 }
 
-
-
-const selectNextTeamMember = () => {
-    inquirer.prompt({
-        type: 'list',
-        message: 'Would you like to add a...',
-        name: 'role',
-        choices: ['Engineer', 'Intern', 'none']
-    })
-    .then(({action}) => {
-        if(action === 'Engineer'){
-
-        } else if(action === 'Intern') {
-            
-        } else {
-            return;
-        }
-    })
-}
-
 new Team().promptManager();
+//new Team().promptEnginner();
+
 
 
 module.exports = Team;
